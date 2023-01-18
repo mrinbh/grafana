@@ -107,6 +107,7 @@ export class CloudWatchDatasource
     if (annotationQueries.length) {
       dataQueryResponses.push(this.annotationQueryRunner.handleAnnotationQuery(annotationQueries, options));
     }
+    console.log(dataQueryResponses);
     // No valid targets, return the empty result to save a round trip.
     if (isEmpty(dataQueryResponses)) {
       return of({
