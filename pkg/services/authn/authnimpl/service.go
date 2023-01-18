@@ -49,8 +49,8 @@ func ProvideService(
 	s := &Service{
 		log:            log.New("authn.service"),
 		cfg:            cfg,
-		queue:          newQueue(),
 		clients:        make(map[string]authn.Client),
+		clientQueue:    newQueue[authn.ContextAwareClient](),
 		tracer:         tracer,
 		sessionService: sessionService,
 		postAuthHooks:  []authn.PostAuthHookFn{},
@@ -127,8 +127,8 @@ type Service struct {
 	log log.Logger
 	cfg *setting.Cfg
 
-	queue   *queue
-	clients map[string]authn.Client
+	clients     map[string]authn.Client
+	clientQueue *queue[authn.ContextAwareClient]
 
 	tracer         tracing.Tracer
 	sessionService auth.UserTokenService
@@ -144,7 +144,7 @@ func (s *Service) Authenticate(ctx context.Context, r *authn.Request) (*authn.Id
 	defer span.End()
 
 	var latestErr error
-	for _, c := range s.queue.clients {
+	for _, c := range s.clientQueue.items {
 		if c.Test(ctx, r) {
 			identity, err := s.authenticate(ctx, c, r)
 			if err != nil {
@@ -239,7 +239,7 @@ func (s *Service) RegisterPostLoginHook(hook authn.PostLoginHookFn) {
 func (s *Service) RegisterClient(c authn.Client) {
 	s.clients[c.Name()] = c
 	if cac, ok := c.(authn.ContextAwareClient); ok {
-		s.queue.insert(cac)
+		s.clientQueue.insert(cac)
 	}
 }
 
