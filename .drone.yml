@@ -5600,13 +5600,13 @@ kind: secret
 name: azure_tenant
 ---
 get:
-  name: public-key
+  name: public-key-b64
   path: infra/data/ci/packages-publish/gpg
 kind: secret
 name: packages_gpg_public_key
 ---
 get:
-  name: private-key
+  name: private-key-b64
   path: infra/data/ci/packages-publish/gpg
 kind: secret
 name: packages_gpg_private_key
@@ -5635,7 +5635,25 @@ get:
 kind: secret
 name: packages_secret_access_key
 ---
+get:
+  name: aws_region
+  path: secret/data/common/aws-marketplace
+kind: secret
+name: aws_region
+---
+get:
+  name: aws_access_key_id
+  path: secret/data/common/aws-marketplace
+kind: secret
+name: aws_access_key_id
+---
+get:
+  name: aws_secret_access_key
+  path: secret/data/common/aws-marketplace
+kind: secret
+name: aws_secret_access_key
+---
 kind: signature
-hmac: 7b6f6906fff47ab3bfcc9fde3c30428766c935d1a8b0d80fde012bec248b7951
+hmac: 14671a0387cb0b37948c54ca4410a3549a26fd0d2ed6e9e43f7bf46851b3b0a1
 
 ...
