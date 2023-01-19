@@ -403,5 +403,11 @@ var (
 			State:           FeatureStateBeta,
 			RequiresRestart: false,
 		},
+		{
+			Name:         "topNavCommandPalette",
+			Description:  "Launch the Command Palette from top nav search box",
+			State:        FeatureStateBeta,
+			FrontendOnly: true,
+		},
 	}
 )
