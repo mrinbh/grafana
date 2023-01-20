@@ -30,9 +30,12 @@ func (h *RemoteLokiBackend) TestConnection() error {
 	return h.client.ping()
 }
 
-func (h *RemoteLokiBackend) RecordStatesAsync(ctx context.Context, _ *models.AlertRule, _ []state.StateTransition) {
+func (h *RemoteLokiBackend) RecordStatesAsync(ctx context.Context, _ *models.AlertRule, _ []state.StateTransition) <-chan error {
 	logger := h.log.FromContext(ctx)
 	logger.Debug("Remote Loki state history backend was called with states")
+	errCh := make(chan error)
+	close(errCh)
+	return errCh
 }
 
 func (h *RemoteLokiBackend) QueryStates(ctx context.Context, query models.HistoryQuery) (*data.Frame, error) {
